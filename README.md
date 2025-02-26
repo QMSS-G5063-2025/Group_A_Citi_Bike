@@ -9,4 +9,4 @@ Group Project Repo
 - Varsha Varkhedi ()
 - Di Liu (dl3738@cumc.columbia.edu)
 - Yanwei Li (yl5403@cumc.columbia.edu)
-- Adit Anand ()
+- Adit Anand (adit.anand@columbia.edu)
