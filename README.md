@@ -7,6 +7,6 @@ Group Project Repo
 
 ### Team members
 - Varsha Varkhedi ()
-- Di Liu ()
+- Di Liu (dl3738@cumc.columbia.edu)
 - Yanwei Li (yl5403@cumc.columbia.edu)
 - Adit Anand ()
