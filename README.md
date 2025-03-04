@@ -1,4 +1,4 @@
-# Group_A_Citi_Bikes
+# Group_A_Citi_Bike
 Group Project Repo
 
 ### Group title: The Citi of Bikes
