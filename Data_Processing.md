@@ -9,8 +9,8 @@ manhattanFilter = dfNeighborhoods[boroughCol] == "Manhattan"
 dfManhattan = dfNeighborhoods[manhattanFilter]
 ```
 
-## Reading in CITI Bike Station Locations
-Please use the following code to extract an array of JSON objects, each of which represent a CITI bike station.
+## Reading in CITI Bike Station
+Please use the following code to extract an array of JSON objects. Each JSON object contains information (including but not limited to latitude, longitude, station name) about a unique bike station.
 ```python
 import json
 bikeStationsFilepath = "./input/citi_bike_station_information.json"
