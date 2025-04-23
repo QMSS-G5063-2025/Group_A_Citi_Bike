@@ -7,6 +7,13 @@ import folium
 import pandas as pd
 from branca.colormap import linear
 
+#Read pickle files
+df_0714_nyc = pd.read_pickle('./input/df_0714_nyc.pkl')
+df_0719_nyc = pd.read_pickle('./input/df_0719_nyc.pkl')
+df_0724_nyc = pd.read_pickle('./input/df_0724_nyc.pkl')
+    
+
+
 def set_styling():
     markdown(
         """
@@ -94,10 +101,6 @@ def create_station_map():
                 tooltip=f"Station name: {row['station name']}"
             ).add_to(feature_group)
 
-    #Read pickle file data
-    df_0714_nyc = pd.read_pickle('./input/df_0714_nyc.pkl')
-    df_0719_nyc = pd.read_pickle('./input/df_0719_nyc.pkl')
-    df_0724_nyc = pd.read_pickle('./input/df_0724_nyc.pkl')
     # Add markers to respective layers
     add_markers(df_0714_nyc, fg_2014, 'red', 2014)
     add_markers(df_0719_nyc, fg_2019, 'green', 2019)
