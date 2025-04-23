@@ -1,0 +1,79 @@
+Neighborhood,Number of Train Stations,Number of Bike Stations,Mean Distance from Train Stop to Bike Station (km)
+Astoria,4,49,0.082
+Bay Ridge,2,6,0.53
+Bedford-Stuyvesant,10,83,0.109
+Boerum Hill,1,10,0.023
+Bronx Park,1,1,0.942
+Brooklyn Heights,2,12,0.042
+Brownsville,7,5,1.045
+Bushwick,12,60,0.07
+Carroll Gardens,1,13,0.042
+Central Park,6,11,0.089
+Chelsea,9,42,0.076
+Chinatown,1,9,0.044
+Civic Center,3,4,0.116
+Claremont Village,1,19,0.043
+Clinton Hill,3,10,0.089
+Cobble Hill,1,3,0.069
+Concourse,4,17,0.125
+Corona,1,25,0.042
+Crown Heights,7,72,0.061
+Cypress Hills,9,4,1.068
+Ditmars Steinway,1,40,0.108
+Downtown Brooklyn,8,10,0.103
+East Flatbush,4,37,0.482
+East Harlem,5,40,0.071
+East Morrisania,2,12,0.042
+East Village,5,42,0.108
+Elmhurst,6,33,0.061
+Financial District,15,25,0.088
+Flatbush,5,25,0.449
+Flatiron District,2,6,0.145
+Fordham,6,26,0.074
+Fort Greene,3,22,0.093
+Glendale,1,6,0.089
+Gowanus,2,16,0.146
+Gramercy,2,9,0.101
+Greenpoint,2,35,0.129
+Greenwich Village,2,14,0.056
+Harlem,15,68,0.083
+Hell's Kitchen,3,29,0.072
+Inwood,4,23,0.029
+Jackson Heights,2,40,0.091
+Kensington,3,10,0.716
+Kingsbridge,4,42,0.131
+Long Island City,14,68,0.098
+Longwood,8,34,0.071
+Lower East Side,4,27,0.111
+Marble Hill,1,2,0.099
+Melrose,1,8,0.087
+Middle Village,1,3,0.159
+Midtown,18,59,0.081
+Morningside Heights,2,11,0.102
+Morris Heights,1,15,0.091
+Mott Haven,7,27,0.101
+Mount Eden,2,5,0.085
+Mount Hope,3,12,0.095
+NoHo,2,2,0.07
+Norwood,4,9,0.331
+Park Slope,5,20,0.082
+Prospect Heights,1,8,0.05
+Prospect Park,2,15,0.069
+Prospect-Lefferts Gardens,4,25,0.073
+Ridgewood,3,39,0.114
+Roosevelt Island,1,3,0.209
+SoHo,8,16,0.078
+South Slope,2,6,0.08
+Sunnyside,4,29,0.064
+Sunset Park,6,55,0.056
+Theater District,8,9,0.084
+Tribeca,6,21,0.069
+Upper East Side,9,44,0.145
+Upper West Side,7,46,0.11
+Vinegar Hill,1,6,0.002
+Washington Heights,11,46,0.082
+West Farms,1,9,0.058
+West Village,4,21,0.033
+Williamsburg,12,80,0.078
+Windsor Terrace,2,12,0.093
+Woodside,4,35,0.074
