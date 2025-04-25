@@ -1,37 +1,33 @@
-source_neighborhood, standardized_neighborhood
-Battery Park City, Battery Park/Tribeca
-Tribeca, Battery Park/Tribeca
-Chelsea, Midtown Business District
-Murray Hill, Murray Hill/Stuyvesant
-Stuyvesant Town, Muray Hill/Stuvesant
-Chelsea, Chelsea/Clinton
-"Hell's Kitchen", Chelsea/Clinton
-Chinatown, Lower East Side
-Lower East Side, Lower East Side
-Civic Center, Lower East Side
-Inwood, Washington Heights
-Two Bridges, Lower East Side
-Midtown, Midtown Business District
-Greenwich Village, Greenwich Village
-
- 'East Harlem', 'East Village', ,
-       'Financial District', 'Flatiron District', ,
-       'Gramercy', 'Harlem', "Hell's Kitchen",
-       'Kips Bay', 'Little Italy',
-       'Lower East Side', 'Marble Hill',, 'Morningside Heights',
-       'Murray Hill', 'NoHo', 'Nolita', "Randall's Island",
-       'Roosevelt Island', 'SoHo',, 'Theater District',
-       , 'Upper East Side', 'Upper West Side',
-       'Washington Heights', 'West Village'
-
-Greenwich Village,
-Lower East Side
-Chelsea/Clinton
-Midtown Business District
-Murray Hill/Stuyvesant
-Upper West Side
-Upper East Side
-Manhattanville,
-Central Harlem
-East Harlem,
-Washington Heights
+source_neighborhood,standardized_neighborhood
+Battery Park City,Battery Park/Tribeca
+Tribeca,Battery Park/Tribeca
+Murray Hill,Murray Hill/Stuyvesant
+Stuyvesant Town,Murray Hill/Stuyvesant
+Chelsea,Chelsea/Clinton
+"Hell's Kitchen",Chelsea/Clinton
+Chinatown,Lower East Side
+Lower East Side,Lower East Side
+Civic Center,Lower East Side
+Inwood,Washington Heights
+Two Bridges,Lower East Side
+Midtown,Midtown Business District
+Greenwich Village,Greenwich Village
+East Harlem,East Harlem
+East Village,Lower East Side
+Financial District,Lower Manhattan
+Flatiron District,Chelsea/Clinton
+Gramercy,Murray Hill/Stuyvesant
+Harlem,Central Harlem
+Kips Bay,Murray Hill/Stuyvesant
+Little Italy,Lower East Side
+Marble Hill,Inwood
+Morningside Heights,Manhattanville
+NoHo,Greenwich Village
+Nolita,Greenwich Village
+Roosevelt Island,Upper East Side
+SoHo,Greenwich Village
+Theater District,Midtown Business District
+Upper East Side,Upper East Side
+Upper West Side,Upper West Side
+Washington Heights,Washington Heights
+West Village,Greenwich Village

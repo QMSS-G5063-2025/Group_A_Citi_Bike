@@ -7,6 +7,8 @@ import folium
 import pandas as pd
 from branca.colormap import linear
 import plotly.express as px
+from folium.plugins import MarkerCluster
+
 #Read in Manhattan GeoJSON
 neighborhoodsGeometryFilepath = "./input/nyc_neighborhoods.geojson"
 boroughCol = "borough"
@@ -34,6 +36,26 @@ userCountsFilepath = "./input/plot_3_yl.pkl"
 user_type_counts = pd.read_pickle(userCountsFilepath)
 user_type_counts['neighborhood'] = user_type_counts['neighborhood'].astype(str)
 user_type_counts = user_type_counts.sort_values(by='member')
+
+#Load in and process geometry data to map to standard neighborhoods
+stationsFilepath = "./input/bike_stations_augmented.csv"
+mappingsFilepath = "./input/neighborhood_mappings.csv"
+incomeFilepath = "./input/nyc_neighborhood_incomes.csv"
+dfBikeStationsAugmented = pd.read_csv(stationsFilepath)
+dfMappings = pd.read_csv(mappingsFilepath)
+dfManhattanNormalized = dfManhattan.merge(dfMappings, left_on = "neighborhood", right_on = "source_neighborhood", how = "inner")
+dfManhattanNormalized = dfManhattanNormalized[["geometry", "source_neighborhood", "standardized_neighborhood"]]
+# Drop the 'location' column (optional to do before or after)
+dfManhattanNormalized = dfManhattanNormalized.drop(columns=["source_neighborhood"])
+# Merge polygons by 'grouped_location'
+merged = dfManhattanNormalized.dissolve(by="standardized_neighborhood")
+dfIncomes = pd.read_csv(incomeFilepath)
+dfIncomes = dfIncomes.rename(columns = {"Location":"standardized_neighborhood", "Data":"Annual Income"})
+dfIncomes = dfIncomes[["standardized_neighborhood", "Annual Income"]]
+dfManhattanIncomes = merged.merge(dfIncomes, left_on = "standardized_neighborhood", right_on = "standardized_neighborhood", how = "inner")
+manhattanFilter = dfBikeStationsAugmented[boroughCol] == "Manhattan"
+dfManhattanStations = dfBikeStationsAugmented[manhattanFilter]
+
 
 def set_styling():
     markdown(
@@ -292,6 +314,52 @@ def create_user_type_plot():
     # Show the plot
     st.plotly_chart(fig)
 
+def income_plot_and_stations():
+    # Create the base map
+    m = folium.Map(
+        location=[40.7738, -73.9660],
+        zoom_start=14,
+        tiles='CartoDB positron',
+    )
+
+    # Define colormap for Classic Bike Rides
+    colormap = linear.YlGn_09.scale(
+        int(dfManhattanIncomes['Annual Income'].min()), int(dfManhattanIncomes['Annual Income'].max())
+    )
+
+    # Adding GeoJsonTooltip to display both classic and electric bike data when both layers are shown
+    tooltip_combined = folium.GeoJsonTooltip(
+        fields=['standardized_neighborhood', 'Annual Income'],  # Include both fields
+        aliases=['Neighborhood:', 'Annual Income:'],  # Add appropriate aliases
+        localize=True,
+        sticky=True
+    )
+
+    folium.GeoJson(
+        dfManhattanIncomes,  # This is your GeoDataFrame or GeoJSON data
+        style_function=lambda feature: {
+            "fillColor": colormap(feature["properties"]["Annual Income"]),
+            "color": "transparent",  # Set border color to transparent
+            "weight": 0,  # No visible border
+            "fillOpacity": 0.7,  # Set fill opacity for the polygons
+        },
+        tooltip=tooltip_combined,
+        popup=False
+    ).add_to(m)
+
+    markerCluster = MarkerCluster().add_to(m)
+
+    for index, row in dfManhattanStations.iterrows():
+        folium.Marker(
+            location = [row["lat"], row["lon"]],
+            popup = row["borough"],
+            icon = None
+        ).add_to(markerCluster)
+
+    markerCluster.add_to(m)
+    #Add to Streamlit app
+    st.components.v1.html(folium.Figure().add_child(m).render(), height = 500)
+
 
 with st.sidebar:
     selected = option_menu(
@@ -315,15 +383,29 @@ elif selected == "Location Plots":
     st.header("Overlap of Casual and Member Bike Rides by Precinct")
     create_user_type_plot()
 
+
+
 elif selected == "Network and Time Analysis":
     set_styling()
     st.title("Network and Time Analysis")
+    st.image("./input/images/citi_seasonal.png")
+    st.image("./input/images/citi_duration.png")
+    st.image("./input/images/citi_hexbin.png")
+    st.image("./input/images/Citi_Network_round.png")
+
 
 elif selected == "External Data":
     set_styling()
     st.title("Incorporating External Data Sources")
     st.header("Neighborhood Train Stop and Bike Station Statistics")
+    st.text("These tables provide descriptive statistics for both train stations and bike stations, offering a detailed overview of key metrics such as the number of stations and average closest distance from train stations to a bike station. The first table focused on Manhattan neighborhoods, and the second table focused on the level of boroughs.")
     #Create table for neighborhood statistics
-    neighborhoodStatsFilepath = "./output/neighborhood_stats.csv"
-    dfInput = pd.read_csv(neighborhoodStatsFilepath)
-    st.dataframe(dfInput, hide_index = True)
+    neighborhoodStatsFilepath = "./output/manhattan_neighborhood_stats.csv"
+    boroughStatsFilepath = "./output/borough_stats.csv"
+    dfNeighborhood = pd.read_csv(neighborhoodStatsFilepath)
+    dfBorough = pd.read_csv(boroughStatsFilepath)
+    st.dataframe(dfNeighborhood, hide_index = True)
+    st.dataframe(dfBorough, hide_index = True)
+    st.header("Median Income of Neighborhood by Number of Bike Stations")
+    st.text("This map shows the median income of neighborhoods in Manhattan and overlays it with clustered markers for the bike stations in Manhattan. The median income of a neighborhood has no clear association with the number of Citi bike stations in the neighborhood.")
+    income_plot_and_stations()
