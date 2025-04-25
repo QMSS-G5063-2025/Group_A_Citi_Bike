@@ -1,0 +1,5 @@
+Borough,# Train Stations,# Bike Stations,Mean Distance from Train Stop to Bike Station (km)
+Bronx,70,326,0.935
+Brooklyn,168,699,1.172
+Manhattan,154,675,0.087
+Queens,86,450,3.208
