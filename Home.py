@@ -6,13 +6,34 @@ import geopandas as gpd
 import folium
 import pandas as pd
 from branca.colormap import linear
-
+import plotly.express as px
+#Read in Manhattan GeoJSON
+neighborhoodsGeometryFilepath = "./input/nyc_neighborhoods.geojson"
+boroughCol = "borough"
+dfNeighborhoods = gpd.read_file(neighborhoodsGeometryFilepath)
+manhattanFilter = dfNeighborhoods[boroughCol] == "Manhattan"
+dfManhattan = dfNeighborhoods[manhattanFilter]
 #Read pickle files
 df_0714_nyc = pd.read_pickle('./input/df_0714_nyc.pkl')
 df_0719_nyc = pd.read_pickle('./input/df_0719_nyc.pkl')
 df_0724_nyc = pd.read_pickle('./input/df_0724_nyc.pkl')
-    
 
+#Read counts for classic and electric bike rides from Pickle file
+bikeTypeFilepath = "./input/plot_2_yl.pkl"
+manhattan_counts = pd.read_pickle(bikeTypeFilepath)
+manhattan_counts = manhattan_counts[['neighborhood', 'boroughCode', 'borough', '@id',
+       'geometry', 'classic_bike', 'electric_bike', 'gap', 'percentage']]
+manhattan_counts[['classic_bike', 'electric_bike']] = manhattan_counts[['classic_bike', 'electric_bike']].fillna(0)
+manhattan_counts['gap'] = manhattan_counts['electric_bike'] - manhattan_counts['classic_bike']
+manhattan_counts['percentage'] = manhattan_counts['electric_bike'] / (manhattan_counts['electric_bike'] + manhattan_counts['classic_bike'])
+# This will drop Ellis Island and Liberty Island
+manhattan_counts = manhattan_counts[~manhattan_counts['percentage'].isna()]
+
+#Read in user type counts Pickle file
+userCountsFilepath = "./input/plot_3_yl.pkl"
+user_type_counts = pd.read_pickle(userCountsFilepath)
+user_type_counts['neighborhood'] = user_type_counts['neighborhood'].astype(str)
+user_type_counts = user_type_counts.sort_values(by='member')
 
 def set_styling():
     markdown(
@@ -45,6 +66,18 @@ def set_styling():
                 opacity: 1.0;
             }
 
+            #overlap-of-casual-and-member-bike-rides-by-precinct {
+                color: #ffffff;
+            }
+
+            h1 {
+                color: #ffffff;
+            }
+
+            .st-emotion-cache-ah6jdd {
+                color: #ffffff;
+            }
+
             reportview-container {
             margin-top: -2em;
             }
@@ -72,7 +105,7 @@ def create_station_map():
     # Create a map centered on Upper East Side
     m = folium.Map(
         location=[40.7738, -73.9660],
-        zoom_start=14,
+        zoom_start=12,
         tiles='CartoDB positron',
         # FIXME: if you comment out tiles, you can get openstreetmap as the base map
     )
@@ -113,66 +146,57 @@ def create_station_map():
 
     # Add layer control
     folium.LayerControl(collapsed=False).add_to(m)
+    #Add to streamlit app
     st.components.v1.html(folium.Figure().add_child(m).render(), height = 500)
     
 def create_electric_vs_regular_map():
-    precinct_counts = (
-        df_all_24_nyc
-        .groupby(['Precinct', 'rideable_type'])
-        .size()
-        .unstack(fill_value=0)
-        .reset_index()
-    )
-    manhattan_counts = manhattan.merge(precinct_counts, on='Precinct', how='left')
-    manhattan_counts[['classic_bike', 'electric_bike']] = manhattan_counts[['classic_bike', 'electric_bike']].fillna(0)
-    manhattan_counts['gap'] = manhattan_counts['electric_bike'] - manhattan_counts['classic_bike']
     # Create the base map
     m = folium.Map(
         location=[40.7738, -73.9660],
-        zoom_start=14,
+        zoom_start=12,
         tiles='CartoDB positron',
     )
 
     # Create FeatureGroups for the two layers
-    fg_gap = folium.FeatureGroup(name='Electric Bike Rides - Classic Bike Rides')
     fg_classic = folium.FeatureGroup(name='Classic Bike Rides')
     fg_electric = folium.FeatureGroup(name='Electric Bike Rides')
+    fg_percentage_normalized = folium.FeatureGroup(name='Electric Bike Percentage Normalized')
 
     # Define colormap for Classic Bike Rides
     colormap_classic = linear.YlGn_09.scale(
-        manhattan_counts['classic_bike'].min(), manhattan_counts['classic_bike'].max()
+        int(manhattan_counts['classic_bike'].min()), int(manhattan_counts['electric_bike'].max())
     )
 
     # Define colormap for Electric Bike Rides
-    colormap_electric = linear.YlGn_09.scale(
-        manhattan_counts['electric_bike'].min(), manhattan_counts['electric_bike'].max()
+    colormap_electric = linear.Blues_04.scale(
+        int(manhattan_counts['classic_bike'].min()), int(manhattan_counts['electric_bike'].max())
     )
 
     # Define colormap for Electric Bike Rides
-    colormap_gap = linear.Purples_05.scale(
-        manhattan_counts['gap'].min(), manhattan_counts['gap'].max()
+    colormap_percentage_normalized = linear.Purples_04.scale(
+        manhattan_counts['percentage'].sort_values().to_list()[1], manhattan_counts['percentage'].max()
     )
 
     # Adding GeoJsonTooltip to display both classic and electric bike data when both layers are shown
     tooltip_combined_c = folium.GeoJsonTooltip(
-        fields=['Precinct', 'classic_bike', 'electric_bike'],  # Include both fields
-        aliases=['Precinct:', 'Classic Bike Rides:', 'Electric Bike Rides:'],  # Add appropriate aliases
+        fields=['neighborhood', 'classic_bike'],  # Include both fields
+        aliases=['Neighborhood:', 'Classic Bike Rides:'],  # Add appropriate aliases
         localize=True,
         sticky=True
     )
 
     # Adding GeoJsonTooltip to display both classic and electric bike data when both layers are shown
     tooltip_combined_e = folium.GeoJsonTooltip(
-        fields=['Precinct', 'classic_bike', 'electric_bike'],  # Include both fields
-        aliases=['Precinct:', 'Classic Bike Rides:', 'Electric Bike Rides:'],  # Add appropriate aliases
+        fields=['neighborhood', 'electric_bike'],  # Include both fields
+        aliases=['Neighborhood:', 'Electric Bike Rides:'],  # Add appropriate aliases
         localize=True,
         sticky=True
     )
 
     # Adding GeoJsonTooltip to display both classic and electric bike data when both layers are shown
-    tooltip_combined_gap = folium.GeoJsonTooltip(
-        fields=['Precinct', 'gap'],  # Include both fields
-        aliases=['Precinct:', 'Electric Bike Rides - Classic Bike Rides:'],  # Add appropriate aliases
+    tooltip_combined_percentage_normalized = folium.GeoJsonTooltip(
+        fields=['neighborhood', 'percentage', 'electric_bike', 'classic_bike'],  # Include both fields
+        aliases=['Neighborhood:', 'Electric Bike % out of all rides in neighborhood:', 'Electric Bike Rides:', 'Classic Bike Rides:'],  # Add appropriate aliases
         localize=True,
         sticky=True
     )
@@ -206,25 +230,68 @@ def create_electric_vs_regular_map():
     folium.GeoJson(
         manhattan_counts,  # This is your GeoDataFrame or GeoJSON data
         style_function=lambda feature: {
-            "fillColor": colormap_gap(feature["properties"]["gap"]),
+            "fillColor": colormap_percentage_normalized(feature["properties"]["percentage"]),
             "color": "transparent",  # Set border color to transparent
             "weight": 0,  # No visible border
             "fillOpacity": 0.7,  # Set fill opacity for the polygons
         },
-        tooltip=tooltip_combined_gap,
+        tooltip=tooltip_combined_percentage_normalized,
         popup=False
-    ).add_to(fg_gap)
+    ).add_to(fg_percentage_normalized)
 
     # Add FeatureGroups to the map
-    fg_gap.add_to(m)
-    fg_classic.add_to(m)
     fg_electric.add_to(m)
+    fg_classic.add_to(m)
+    fg_percentage_normalized.add_to(m)
 
     # Add Layer Control for toggling between layers
     folium.LayerControl(collapsed=False).add_to(m)
+    #Add to Streamlit app
+    st.components.v1.html(folium.Figure().add_child(m).render(), height = 500)
 
-    # Show the map
-    m
+def create_user_type_plot():
+    max_y_value = user_type_counts[['casual', 'member']].max().max()
+    # Create a Plotly bar chart with overlapping bars
+    fig = px.bar(
+        user_type_counts,
+        ##x='neighborhood',  # Now 'Precinct' is a regular column
+        ##y=['casual', 'member'],  # Assuming your columns are 'casual' and 'member'
+        x = ['casual', 'member'],
+        y = 'neighborhood',
+        labels={'neighborhood': 'Neighborhood', 'value': 'Count', 'member_casual': 'User Type'},
+        ##title="Overlap of Casual and Member Bike Rides by Precinct",
+        width = 500, height = 800
+    )
+
+    # Update the layout to set the bar mode to overlay and adjust the layout for better display
+    fig.update_layout(
+        barmode='overlay',  # Overlay the bars
+        ##xaxis_title='',
+        ##yaxis_title='Count',
+        xaxis_title = "Count",
+        yaxis_title = "Neighborhood",
+        legend_title='User Type',
+        ##xaxis=dict(
+        yaxis=dict(
+            fixedrange=True,  # Fix x-axis range
+            tickmode='array',  # Set ticks to be explicitly defined
+            tickvals=user_type_counts['neighborhood'],  # Show all precincts on the x-axis
+            ticktext=user_type_counts['neighborhood'],  # Display all precinct values explicitly
+            ###tickangle=45,  # Rotate the x-axis labels for better readability
+        ),
+        ##yaxis=dict(
+        xaxis=dict(
+            fixedrange=True,  # Fix y-axis range
+            range=[0, max_y_value + 5],  # Set y-axis range based on maximum value
+        )
+    )
+
+    # Update the traces to make the bars semi-transparent
+    fig.update_traces(opacity=0.6)  # Set opacity to 60% (semi-transparent)
+
+    # Show the plot
+    st.plotly_chart(fig)
+
 
 with st.sidebar:
     selected = option_menu(
@@ -244,6 +311,9 @@ elif selected == "Location Plots":
     set_styling()
     st.title("Location-Based Plots")
     create_station_map()
+    create_electric_vs_regular_map()
+    st.header("Overlap of Casual and Member Bike Rides by Precinct")
+    create_user_type_plot()
 
 elif selected == "Network and Time Analysis":
     set_styling()
