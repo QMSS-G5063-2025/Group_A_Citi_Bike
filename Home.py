@@ -378,9 +378,14 @@ if selected == "Home":
 elif selected == "Location Plots":
     set_styling()
     st.title("Location-Based Plots")
+    st.header("Evolution of Manhattan Bike Stations (2014–2024)")
+    st.text("This interactive map shows the dramatic growth of Manhattan's bike station network over time. Users can explore snapshots from July of 2014, 2019, and 2024 to see how stations have expanded across the city. In 2014, the system was limited to areas below Central Park. By 2019, it extended past Harlem. And by 2024, it reached deep into upper Manhattan, with coverage even below 231st Street — highlighting the city’s ongoing investment in accessible, sustainable transit across more neighborhoods.")
     create_station_map()
+    st.header("Electric vs. Classic Bike Usage by Neighborhood in 2024")
+    st.text("This interactive map explores the spatial dynamics of bike usage in NYC, based on ride starting locations. Users can toggle between three heatmap layers: one for electric bike rides, one for classic bike rides, and a third showing the percentage of electric bike rides relative to all rides in each neighborhood.")
     create_electric_vs_regular_map()
-    st.header("Overlap of Casual and Member Bike Rides by Precinct")
+    st.header("Member vs. Casual Bike Usage by Neighborhood in 2024")
+    st.text("This overlapping bar chart compares the number of bike rides taken by members versus casual users across NYC neighborhoods. Neighborhoods are sorted in descending order by total member ride counts. Across the board, members consistently account for more rides than casual users — often by a large margin.")
     create_user_type_plot()
 
 
@@ -388,9 +393,17 @@ elif selected == "Location Plots":
 elif selected == "Network and Time Analysis":
     set_styling()
     st.title("Network and Time Analysis")
+    st.header("Seasonal Trends of CITI Bike Ride Counts in 2024")
+    st.text("This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months.")
     st.image("./input/images/citi_seasonal.png")
+    st.header("Grouped Bar Plot: July CITI Bike Ride Duration Density (Normalized by User Type)")
+    st.text("This grouped bar plot shows the density of specific ride durations in July, normalized by user type. It reveals a clear trend toward shorter ride durations overall. Interestingly, casual users tend to have shorter ride durations, whereas members typically have longer ones.")
     st.image("./input/images/citi_duration.png")
+    st.header("Hexbin Plot: July CITI Bike Ride Duration vs Distance")
+    st.text("This Hexbin plot shows the relationship between ride distance and duration. It was created by randomly sampling 200,000 rides from the month of July. The plot reveals a clear correlation between distance and duration, indicating that, aside from outliers, most users are using their bikes to travel from one place to another. Alternatively, the high frequency of rides with low distance and high duration suggests that some people take joy rides for extended periods without covering much ground.")
     st.image("./input/images/citi_hexbin.png")
+    st.header("Bike Trip Network Across Manhattan Neighborhoods")
+    st.text("This circular network analysis illustrates the connections and most frequently used pathways between Manhattan neighborhoods. Node colors represent degree centrality, with red indicating highly trafficked hubs and blue indicating less trafficked ones. Node size reflects the number of rides entering and exiting each hub. The graph was created by randomly sampling ~80,000 rides from the 2024 Citi Bike data. It highlights Chelsea, Midtown, and the Upper and Lower East Sides as major hubs that users frequently travel to and from.")
     st.image("./input/images/Citi_Network_round.png")
 
 
@@ -404,7 +417,9 @@ elif selected == "External Data":
     boroughStatsFilepath = "./output/borough_stats.csv"
     dfNeighborhood = pd.read_csv(neighborhoodStatsFilepath)
     dfBorough = pd.read_csv(boroughStatsFilepath)
+    st.header("Neighborhood Statistics (Manhattan Only)")
     st.dataframe(dfNeighborhood, hide_index = True)
+    st.header("Borough Statistics")
     st.dataframe(dfBorough, hide_index = True)
     st.header("Median Income of Neighborhood by Number of Bike Stations")
     st.text("This map shows the median income of neighborhoods in Manhattan and overlays it with clustered markers for the bike stations in Manhattan. The median income of a neighborhood has no clear association with the number of Citi bike stations in the neighborhood.")
