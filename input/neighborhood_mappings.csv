@@ -1,0 +1,37 @@
+source_neighborhood, standardized_neighborhood
+Battery Park City, Battery Park/Tribeca
+Tribeca, Battery Park/Tribeca
+Chelsea, Midtown Business District
+Murray Hill, Murray Hill/Stuyvesant
+Stuyvesant Town, Muray Hill/Stuvesant
+Chelsea, Chelsea/Clinton
+"Hell's Kitchen", Chelsea/Clinton
+Chinatown, Lower East Side
+Lower East Side, Lower East Side
+Civic Center, Lower East Side
+Inwood, Washington Heights
+Two Bridges, Lower East Side
+Midtown, Midtown Business District
+Greenwich Village, Greenwich Village
+
+ 'East Harlem', 'East Village', ,
+       'Financial District', 'Flatiron District', ,
+       'Gramercy', 'Harlem', "Hell's Kitchen",
+       'Kips Bay', 'Little Italy',
+       'Lower East Side', 'Marble Hill',, 'Morningside Heights',
+       'Murray Hill', 'NoHo', 'Nolita', "Randall's Island",
+       'Roosevelt Island', 'SoHo',, 'Theater District',
+       , 'Upper East Side', 'Upper West Side',
+       'Washington Heights', 'West Village'
+
+Greenwich Village,
+Lower East Side
+Chelsea/Clinton
+Midtown Business District
+Murray Hill/Stuyvesant
+Upper West Side
+Upper East Side
+Manhattanville,
+Central Harlem
+East Harlem,
+Washington Heights
