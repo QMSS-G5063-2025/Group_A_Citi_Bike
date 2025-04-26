@@ -88,16 +88,23 @@ def set_styling():
                 opacity: 1.0;
             }
 
-            #overlap-of-casual-and-member-bike-rides-by-precinct {
-                color: #ffffff;
-            }
-
+            /* Text for page title */
             h1 {
-                color: #ffffff;
+                color: #55cbcd;
             }
 
+            /* Text for plot title */
+            .st-emotion-cache-seewz2 {
+                color: #6CACE4;
+            }
+
+            h2 {
+                color: #fcb9aa;
+            }
+
+            /*Text for blurbs*/
             .st-emotion-cache-ah6jdd {
-                color: #ffffff;
+                color: #fcb9aa;
             }
 
             reportview-container {
@@ -372,12 +379,14 @@ with st.sidebar:
     
 if selected == "Home":
     set_styling()
-    st.title("The Citi of Bikes")
+    st.markdown(f'<h1 style="color:#C3B1E1;font-size:48px;">{"The Citi of Bikes"}</h1>', unsafe_allow_html = True)
+#    st.title("The Citi of Bikes")
     st.text("The Citi Bike program allows people to travel across New York City with reasonably-priced bike fares and an abundance of bike stations. There is an abundance of historical and real-time bike data available for NYC, so we aim to visualize and identify trends in this data.")
 
 elif selected == "Location Plots":
     set_styling()
-    st.title("Location-Based Plots")
+    ##st.title("Location-Based Plots")
+    st.markdown(f'<h1 style="color:#C3B1E1;font-size:48px;">{"Location-Based Plots"}</h1>', unsafe_allow_html = True)
     st.header("Evolution of Manhattan Bike Stations (2014–2024)")
     st.text("This interactive map shows the dramatic growth of Manhattan's bike station network over time. Users can explore snapshots from July of 2014, 2019, and 2024 to see how stations have expanded across the city. In 2014, the system was limited to areas below Central Park. By 2019, it extended past Harlem. And by 2024, it reached deep into upper Manhattan, with coverage even below 231st Street — highlighting the city’s ongoing investment in accessible, sustainable transit across more neighborhoods.")
     create_station_map()
@@ -388,11 +397,10 @@ elif selected == "Location Plots":
     st.text("This overlapping bar chart compares the number of bike rides taken by members versus casual users across NYC neighborhoods. Neighborhoods are sorted in descending order by total member ride counts. Across the board, members consistently account for more rides than casual users — often by a large margin.")
     create_user_type_plot()
 
-
-
 elif selected == "Network and Time Analysis":
     set_styling()
-    st.title("Network and Time Analysis")
+    ##st.title("Network and Time Analysis")
+    st.markdown(f'<h1 style="color:#C3B1E1;font-size:48px;">{"Network and Time Analysis"}</h1>', unsafe_allow_html = True)
     st.header("Seasonal Trends of CITI Bike Ride Counts in 2024")
     st.text("This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months.")
     st.image("./input/images/citi_seasonal_no_grid.png")
@@ -408,7 +416,8 @@ elif selected == "Network and Time Analysis":
 
 elif selected == "External Data":
     set_styling()
-    st.title("Incorporating External Data Sources")
+    ##st.title("Incorporating External Data Sources")
+    st.markdown(f'<h1 style="color:#C3B1E1;font-size:48px;">{"Incorporating External Data Sources"}</h1>', unsafe_allow_html = True)
     st.header("Neighborhood Train Stop and Bike Station Statistics")
     st.text("These tables provide descriptive statistics for both train stations and bike stations, offering a detailed overview of key metrics such as the number of stations and average closest distance from train stations to a bike station. The first table focused on Manhattan neighborhoods, and the second table focused on the level of boroughs.")
     #Create table for neighborhood statistics
