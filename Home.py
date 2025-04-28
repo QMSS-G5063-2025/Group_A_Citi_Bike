@@ -8,7 +8,7 @@ import pandas as pd
 from branca.colormap import linear
 import plotly.express as px
 from folium.plugins import MarkerCluster
-
+from PIL import Image
 #Read in Manhattan GeoJSON
 neighborhoodsGeometryFilepath = "./input/nyc_neighborhoods.geojson"
 boroughCol = "borough"
@@ -45,17 +45,20 @@ dfBikeStationsAugmented = pd.read_csv(stationsFilepath)
 dfMappings = pd.read_csv(mappingsFilepath)
 dfManhattanNormalized = dfManhattan.merge(dfMappings, left_on = "neighborhood", right_on = "source_neighborhood", how = "inner")
 dfManhattanNormalized = dfManhattanNormalized[["geometry", "source_neighborhood", "standardized_neighborhood"]]
-# Drop the 'location' column (optional to do before or after)
+# Drop the 'source_neighborhood' column
 dfManhattanNormalized = dfManhattanNormalized.drop(columns=["source_neighborhood"])
-# Merge polygons by 'grouped_location'
+# Merge polygons by 'standardized_neighborhood'
 merged = dfManhattanNormalized.dissolve(by="standardized_neighborhood")
+#Read in income data
 dfIncomes = pd.read_csv(incomeFilepath)
 dfIncomes = dfIncomes.rename(columns = {"Location":"standardized_neighborhood", "Data":"Annual Income"})
 dfIncomes = dfIncomes[["standardized_neighborhood", "Annual Income"]]
+#Join income and neighborhood data by 'standardized_neighborhood' field
 dfManhattanIncomes = merged.merge(dfIncomes, left_on = "standardized_neighborhood", right_on = "standardized_neighborhood", how = "inner")
 manhattanFilter = dfBikeStationsAugmented[boroughCol] == "Manhattan"
 dfManhattanStations = dfBikeStationsAugmented[manhattanFilter]
-
+#Set page title
+st.set_page_config(page_title = "Citi Where Nobody Sleeps")
 
 def set_styling():
     markdown(
@@ -88,23 +91,18 @@ def set_styling():
                 opacity: 1.0;
             }
 
-            /* Text for page title */
-            h1 {
-                color: #55cbcd;
-            }
-
             /* Text for plot title */
             .st-emotion-cache-seewz2 {
-                color: #6CACE4;
+                color: #c3b1e1;
             }
 
             h2 {
-                color: #fcb9aa;
+                color: #c3b1e1;
             }
 
             /*Text for blurbs*/
             .st-emotion-cache-ah6jdd {
-                color: #fcb9aa;
+                color: #c3b1e1;
             }
 
             reportview-container {
@@ -295,23 +293,19 @@ def create_user_type_plot():
     # Update the layout to set the bar mode to overlay and adjust the layout for better display
     fig.update_layout(
         barmode='overlay',  # Overlay the bars
-        ##xaxis_title='',
-        ##yaxis_title='Count',
         xaxis_title = "Count",
         yaxis_title = "Neighborhood",
         legend_title='User Type',
-        ##xaxis=dict(
         yaxis=dict(
-            fixedrange=True,  # Fix x-axis range
-            tickmode='array',  # Set ticks to be explicitly defined
-            tickvals=user_type_counts['neighborhood'],  # Show all precincts on the x-axis
-            ticktext=user_type_counts['neighborhood'],  # Display all precinct values explicitly
-            ###tickangle=45,  # Rotate the x-axis labels for better readability
-        ),
-        ##yaxis=dict(
-        xaxis=dict(
             fixedrange=True,  # Fix y-axis range
-            range=[0, max_y_value + 5],  # Set y-axis range based on maximum value
+            tickmode='array',  # Set ticks to be explicitly defined
+            tickvals=user_type_counts['neighborhood'],  # Show all precincts on the y-axis
+            ticktext=user_type_counts['neighborhood'],  # Display all precinct values explicitly
+            ###tickangle=45,  # Rotate the y-axis labels for better readability
+        ),
+        xaxis=dict(
+            fixedrange=True,  # Fix x-axis range
+            range=[0, max_y_value + 5],  # Set x-axis range based on maximum value
         )
     )
 
@@ -322,6 +316,7 @@ def create_user_type_plot():
     st.plotly_chart(fig)
 
 def income_plot_and_stations():
+    bikeStationNameCol = "name"
     # Create the base map
     m = folium.Map(
         location=[40.7738, -73.9660],
@@ -357,10 +352,11 @@ def income_plot_and_stations():
     markerCluster = MarkerCluster().add_to(m)
 
     for index, row in dfManhattanStations.iterrows():
+        stationText = folium.IFrame(f"<p style = 'font-size:14px;'><b>Station Name</b>: {row[bikeStationNameCol]}</p>", width = 200, height = 40)
+        popup = folium.Popup(stationText, max_width = 400)
         folium.Marker(
             location = [row["lat"], row["lon"]],
-            popup = row["borough"],
-            icon = None
+            popup = popup
         ).add_to(markerCluster)
 
     markerCluster.add_to(m)
@@ -399,10 +395,11 @@ elif selected == "Location Plots":
 
 elif selected == "Network and Time Analysis":
     set_styling()
-    ##st.title("Network and Time Analysis")
     st.markdown(f'<h1 style="color:#C3B1E1;font-size:48px;">{"Network and Time Analysis"}</h1>', unsafe_allow_html = True)
-    st.header("Seasonal Trends of CITI Bike Ride Counts in 2024")
-    st.text("This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months.")
+    ##st.header("Seasonal Trends of CITI Bike Ride Counts in 2024")
+    st.markdown(f'<h2 style = "color:#6CACE4;font-size:36px;">{"Seasonal Trends of CITI Bike Ride Counts in 2024"}</h2>', unsafe_allow_html = True)
+    ##st.text("This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months.")
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months."}</p>', unsafe_allow_html = True)
     st.image("./input/images/citi_seasonal_no_grid.png")
     st.header("Grouped Bar Plot: July CITI Bike Ride Duration Density (Normalized by User Type)")
     st.text("This grouped bar plot shows the density of specific ride durations in July, normalized by user type. It reveals a clear trend toward shorter ride durations overall. Interestingly, casual users tend to have shorter ride durations, whereas members typically have longer ones.")
