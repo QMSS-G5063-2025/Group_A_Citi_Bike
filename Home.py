@@ -8,7 +8,6 @@ import pandas as pd
 from branca.colormap import linear
 import plotly.express as px
 from folium.plugins import MarkerCluster
-from PIL import Image
 #Read in Manhattan GeoJSON
 neighborhoodsGeometryFilepath = "./input/nyc_neighborhoods.geojson"
 boroughCol = "borough"
@@ -91,20 +90,6 @@ def set_styling():
                 opacity: 1.0;
             }
 
-            /* Text for plot title */
-            .st-emotion-cache-seewz2 {
-                color: #c3b1e1;
-            }
-
-            h2 {
-                color: #c3b1e1;
-            }
-
-            /*Text for blurbs*/
-            .st-emotion-cache-ah6jdd {
-                color: #c3b1e1;
-            }
-
             reportview-container {
             margin-top: -2em;
             }
@@ -118,7 +103,6 @@ def set_styling():
     )
 
 def plot_manhattan():
-    #fig = plt.figure()
     neighborhoodsGeometryFilepath = "./input/nyc_neighborhoods.geojson"
     dfNeighborhoods = gpd.read_file(neighborhoodsGeometryFilepath)
     boroughCol = "borough"
@@ -134,7 +118,6 @@ def create_station_map():
         location=[40.7738, -73.9660],
         zoom_start=12,
         tiles='CartoDB positron',
-        # FIXME: if you comment out tiles, you can get openstreetmap as the base map
     )
 
     # Create feature groups for each year
@@ -281,12 +264,9 @@ def create_user_type_plot():
     # Create a Plotly bar chart with overlapping bars
     fig = px.bar(
         user_type_counts,
-        ##x='neighborhood',  # Now 'Precinct' is a regular column
-        ##y=['casual', 'member'],  # Assuming your columns are 'casual' and 'member'
         x = ['casual', 'member'],
         y = 'neighborhood',
         labels={'neighborhood': 'Neighborhood', 'value': 'Count', 'member_casual': 'User Type'},
-        ##title="Overlap of Casual and Member Bike Rides by Precinct",
         width = 500, height = 800
     )
 
@@ -370,62 +350,59 @@ with st.sidebar:
     options = ["Home", "Location Plots", "Network and Time Analysis", "External Data"],
     menu_icon = "cast",
     default_index = 0,
-    #orientation = "horizontal",
 )
     
 if selected == "Home":
     set_styling()
-    st.markdown(f'<h1 style="color:#C3B1E1;font-size:48px;">{"The Citi of Bikes"}</h1>', unsafe_allow_html = True)
-#    st.title("The Citi of Bikes")
-    st.text("The Citi Bike program allows people to travel across New York City with reasonably-priced bike fares and an abundance of bike stations. There is an abundance of historical and real-time bike data available for NYC, so we aim to visualize and identify trends in this data.")
+    st.markdown(f'<h1 style="color:#6CACE4;font-size:48px;">{"The Citi of Bikes"}</h1>', unsafe_allow_html = True)
+    st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Group Members"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<ul style = "color:#FFFFFF;font-size:24px;"><li>{"Adit Anand"}</li><li>{"Vivian Li"}</li><li>{"Varsha Varhkhedi"}</li></ul>', unsafe_allow_html = True)
+    st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Description"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<p style="color:#FFFFFF;font-size:18px;">{"In this project, we used a mix of interactive and static visualizations to explore trends in Citi Bike usage and deployment across Manhattan. An interactive time-layered map highlighted how station coverage has expanded from 2014 to 2024. To compare rider behavior, we used a heatmap for electric vs. classic bike usage and a bar plot to contrast member vs. casual rider patterns by neighborhood.<br><br>A circular network graph visualized trip flows between neighborhoods, while a hexbin plot examined the relationship between ride duration and distance during peak summer months. Seasonal usage trends were captured with a line chart, showing how ridership fluctuates over the year.<br><br>We also included a comparative table to examine infrastructure alignment, showing the number of bike and subway stations per neighborhood and their proximity. Lastly, an interactive map overlaying average income and station count helped us assess the equity of station distribution.<br><br>Each visualization was designed to reveal a different dimension of the data—from spatial growth and rider demographics to network flow and social context."}</p>', unsafe_allow_html = True)
 
 elif selected == "Location Plots":
     set_styling()
-    ##st.title("Location-Based Plots")
-    st.markdown(f'<h1 style="color:#C3B1E1;font-size:48px;">{"Location-Based Plots"}</h1>', unsafe_allow_html = True)
-    st.header("Evolution of Manhattan Bike Stations (2014–2024)")
-    st.text("This interactive map shows the dramatic growth of Manhattan's bike station network over time. Users can explore snapshots from July of 2014, 2019, and 2024 to see how stations have expanded across the city. In 2014, the system was limited to areas below Central Park. By 2019, it extended past Harlem. And by 2024, it reached deep into upper Manhattan, with coverage even below 231st Street — highlighting the city’s ongoing investment in accessible, sustainable transit across more neighborhoods.")
+    st.markdown(f'<h1 style="color:#6CACE4;font-size:48px;">{"Location-Based Plots"}</h1>', unsafe_allow_html = True)
+    st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Evolution of Manhattan Bike Stations (2014–2024)"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This interactive map shows the dramatic growth of the bike station network in Manhattan over time. Users can explore snapshots from July of 2014, 2019, and 2024 to see how stations have expanded across the city. In 2014, the system was limited to areas below Central Park. By 2019, it extended past Harlem. And by 2024, it reached deep into upper Manhattan, with coverage even below 231st Street — highlighting the ongoing investment in accessible, sustainable transit across more neighborhoods in NYC."}</p>', unsafe_allow_html = True)
     create_station_map()
-    st.header("Electric vs. Classic Bike Usage by Neighborhood in 2024")
-    st.text("This interactive map explores the spatial dynamics of bike usage in NYC, based on ride starting locations. Users can toggle between three heatmap layers: one for electric bike rides, one for classic bike rides, and a third showing the percentage of electric bike rides relative to all rides in each neighborhood.")
+    st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Electric vs. Classic Bike Usage by Neighborhood in 2024"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This interactive map explores the spatial dynamics of bike usage in NYC, based on ride starting locations. Users can toggle between three heatmap layers: one for electric bike rides, one for classic bike rides, and a third showing the percentage of electric bike rides relative to all rides in each neighborhood."}</p>', unsafe_allow_html = True)
     create_electric_vs_regular_map()
-    st.header("Member vs. Casual Bike Usage by Neighborhood in 2024")
-    st.text("This overlapping bar chart compares the number of bike rides taken by members versus casual users across NYC neighborhoods. Neighborhoods are sorted in descending order by total member ride counts. Across the board, members consistently account for more rides than casual users — often by a large margin.")
+    st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Member vs. Casual Bike Usage by Neighborhood in 2024"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This overlapping bar chart compares the number of bike rides taken by members versus casual users across NYC neighborhoods. Neighborhoods are sorted in descending order by total member ride counts. Across the board, members consistently account for more rides than casual users — often by a large margin."}</p>', unsafe_allow_html = True)
     create_user_type_plot()
 
 elif selected == "Network and Time Analysis":
     set_styling()
-    st.markdown(f'<h1 style="color:#C3B1E1;font-size:48px;">{"Network and Time Analysis"}</h1>', unsafe_allow_html = True)
-    ##st.header("Seasonal Trends of CITI Bike Ride Counts in 2024")
-    st.markdown(f'<h2 style = "color:#6CACE4;font-size:36px;">{"Seasonal Trends of CITI Bike Ride Counts in 2024"}</h2>', unsafe_allow_html = True)
-    ##st.text("This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months.")
+    st.markdown(f'<h1 style="color:#6CACE4;font-size:48px;">{"Network and Time Analysis"}</h1>', unsafe_allow_html = True)
+    st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Seasonal Trends of CITI Bike Ride Counts in 2024"}</h2>', unsafe_allow_html = True)
     st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months."}</p>', unsafe_allow_html = True)
     st.image("./input/images/citi_seasonal_no_grid.png")
-    st.header("Grouped Bar Plot: July CITI Bike Ride Duration Density (Normalized by User Type)")
-    st.text("This grouped bar plot shows the density of specific ride durations in July, normalized by user type. It reveals a clear trend toward shorter ride durations overall. Interestingly, casual users tend to have shorter ride durations, whereas members typically have longer ones.")
+    st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Grouped Bar Plot: July CITI Bike Ride Duration Density (Normalized by User Type)"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This grouped bar plot shows the density of specific ride durations in July, normalized by user type. It reveals a clear trend toward shorter ride durations overall. Interestingly, casual users tend to have shorter ride durations, whereas members typically have longer ones."}</p>', unsafe_allow_html = True)
     st.image("./input/images/citi_duration_dark.png")
-    st.header("Hexbin Plot: July CITI Bike Ride Duration vs Distance")
-    st.text("This Hexbin plot shows the relationship between ride distance and duration. It was created by randomly sampling 200,000 rides from the month of July. The plot reveals a clear correlation between distance and duration, indicating that, aside from outliers, most users are using their bikes to travel from one place to another. Alternatively, the high frequency of rides with low distance and high duration suggests that some people take joy rides for extended periods without covering much ground.")
+    st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Hexbin Plot: July CITI Bike Ride Duration vs Distance"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This Hexbin plot shows the relationship between ride distance and duration. It was created by randomly sampling 200,000 rides from the month of July. The plot reveals a clear correlation between distance and duration, indicating that, aside from outliers, most users are using their bikes to travel from one place to another. Alternatively, the high frequency of rides with low distance and high duration suggests that some people take joy rides for extended periods without covering much ground."}</p>', unsafe_allow_html = True)
     st.image("./input/images/citi_hexbin_dark.png")
-    st.header("Bike Trip Network Across Manhattan Neighborhoods")
-    st.text("This circular network analysis illustrates the connections and most frequently used pathways between Manhattan neighborhoods. Node colors represent degree centrality, with red indicating highly trafficked hubs and blue indicating less trafficked ones. Node size reflects the number of rides entering and exiting each hub. The graph was created by randomly sampling ~80,000 rides from the 2024 Citi Bike data. It highlights Chelsea, Midtown, and the Upper and Lower East Sides as major hubs that users frequently travel to and from.")
+    st.markdown(f'<h2 style = "color:#FFFFFF; font-size:36px;">{"Bike Trip Network Across Manhattan Neighborhoods"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This circular network analysis illustrates the connections and most frequently used pathways between Manhattan neighborhoods. Node colors represent degree centrality, with red indicating highly trafficked hubs and blue indicating less trafficked ones. Node size reflects the number of rides entering and exiting each hub. The graph was created by randomly sampling ~80,000 rides from the 2024 Citi Bike data. It highlights Chelsea, Midtown, and the Upper and Lower East Sides as major hubs that users frequently travel to and from."}</p>', unsafe_allow_html = True)
     st.image("./input/images/Citi_Network_round.png")
 
 elif selected == "External Data":
     set_styling()
-    ##st.title("Incorporating External Data Sources")
-    st.markdown(f'<h1 style="color:#C3B1E1;font-size:48px;">{"Incorporating External Data Sources"}</h1>', unsafe_allow_html = True)
-    st.header("Neighborhood Train Stop and Bike Station Statistics")
-    st.text("These tables provide descriptive statistics for both train stations and bike stations, offering a detailed overview of key metrics such as the number of stations and average closest distance from train stations to a bike station. The first table focused on Manhattan neighborhoods, and the second table focused on the level of boroughs.")
+    st.markdown(f'<h1 style="color:#6CACE4;font-size:48px;">{"Incorporating External Data Sources"}</h1>', unsafe_allow_html = True)
+    st.markdown(f'<h2 style="color:#FFFFFF; font-size:36px;">{"Neighborhood Train Stop and Bike Station Statistics"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF; font-size:18px;">{"These tables provide descriptive statistics for both train stations and bike stations, offering a detailed overview of key metrics such as the number of stations and average closest distance from train stations to a bike station. The first table focused on Manhattan neighborhoods, and the second table focused on the level of boroughs."}</p>', unsafe_allow_html = True)
     #Create table for neighborhood statistics
     neighborhoodStatsFilepath = "./output/manhattan_neighborhood_stats.csv"
     boroughStatsFilepath = "./output/borough_stats.csv"
     dfNeighborhood = pd.read_csv(neighborhoodStatsFilepath)
     dfBorough = pd.read_csv(boroughStatsFilepath)
-    st.header("Neighborhood Statistics (Manhattan Only)")
+    st.markdown(f'<h3 style="color:#FFFFFF; font-size:30px;">{"Neighborhood Statistics (Manhattan Only)"}</h3>', unsafe_allow_html = True)
     st.dataframe(dfNeighborhood, hide_index = True)
-    st.header("Borough Statistics")
+    st.markdown(f'<h3 style="color:#FFFFFF; font-size:30px;">{"Borough Statistics"}</h3>', unsafe_allow_html = True)
     st.dataframe(dfBorough, hide_index = True)
-    st.header("Median Income of Neighborhood by Number of Bike Stations")
-    st.text("This map shows the median income of neighborhoods in Manhattan and overlays it with clustered markers for the bike stations in Manhattan. The median income of a neighborhood has no clear association with the number of Citi bike stations in the neighborhood.")
+    st.markdown(f'<h2 style="color:#FFFFFF; font-size:36px;">{"Median Income of Neighborhood by Number of Bike Stations"}</h2>', unsafe_allow_html = True)
+    st.markdown(f'<p style="color:#FFFFFF;font-size:18px">{"This map shows the median income of neighborhoods in Manhattan and overlays it with clustered markers for the bike stations in Manhattan. The median income of a neighborhood has no clear association with the number of Citi bike stations in the neighborhood."}</p>', unsafe_allow_html = True)
     income_plot_and_stations()
