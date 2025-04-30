@@ -368,9 +368,11 @@ elif selected == "Location Plots":
     create_station_map()
     st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Electric vs. Classic Bike Usage by Neighborhood in 2024"}</h2>', unsafe_allow_html = True)
     st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This interactive map explores the spatial dynamics of bike usage in NYC, based on ride starting locations. Users can toggle between three heatmap layers: one for electric bike rides, one for classic bike rides, and a third showing the percentage of electric bike rides relative to all rides in each neighborhood."}</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"Across all bike types, the distribution is similar for all neighborhoods. Ride density is highest in Midtown, Chelsea, and the East Village. However, a notable trend emerges in the northern neighborhoods: areas like Washington Heights show a higher proportion of electric bike usage compared to classic bikes. This may reflect rider preferences for longer or hillier routes — or possibly differences in bike availability, as many of the northern stations are newer and may have launched with more electric bikes in their fleets."}</p>', unsafe_allow_html = True)
     create_electric_vs_regular_map()
     st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Member vs. Casual Bike Usage by Neighborhood in 2024"}</h2>', unsafe_allow_html = True)
     st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This overlapping bar chart compares the number of bike rides taken by members versus casual users across NYC neighborhoods. Neighborhoods are sorted in descending order by total member ride counts. Across the board, members consistently account for more rides than casual users — often by a large margin."}</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"The top three neighborhoods for overall bike activity are Midtown, Chelsea, and the East Village. This aligns with earlier visualizations, reinforcing these areas as major biking hubs, regardless of bike type or user status."}</p>', unsafe_allow_html = True)
     create_user_type_plot()
 
 elif selected == "Network and Time Analysis":
