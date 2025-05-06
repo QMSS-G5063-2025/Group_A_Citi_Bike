@@ -377,7 +377,7 @@ elif selected == "Network and Time Analysis":
     st.markdown(f'<h1 style="color:#6CACE4;font-size:48px;">{"Network and Time Analysis"}</h1>', unsafe_allow_html = True)
     st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Seasonal Trends of CITI Bike Ride Counts in 2024"}</h2>', unsafe_allow_html = True)
     st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months. This information can be used to inform seasonal patterns of maintaining Citi bike stations."}</p>', unsafe_allow_html = True)
-    st.image("./input/images/citi_seasonal_no_grid.png")
+    st.image("./input/images/citi_seasonal_ungrided.png")
     st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Grouped Bar Plot: July CITI Bike Ride Duration Density (Normalized by User Type)"}</h2>', unsafe_allow_html = True)
     st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This grouped bar plot shows the density of specific ride durations in July, normalized by user type. It reveals a clear trend toward shorter ride durations overall. Interestingly, casual users tend to have shorter ride durations, whereas members typically have longer ones. This information could inform potential route suggestions for members with the Citi bike app if descriptive statistics about ride duration are known."}</p>', unsafe_allow_html = True)
     st.image("./input/images/citi_duration_dark.png")
