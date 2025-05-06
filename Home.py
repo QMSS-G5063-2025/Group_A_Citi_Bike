@@ -74,22 +74,19 @@ def set_styling():
                 right: 0px;
                 bottom: 0px;
                 left: 0px;
-                background-color: rgba(0,0,0,0.75)
+                background-color: rgba(36,36,36,0.75)
             }
             .stAppHeader {
                 opacity: 0.75;
                 background-color: #1560bd;
             }
-
             .stSidebar {
                 opacity: 0.95;
                 background-color: #1560bd;
             }
-
             .st-emotion-cache-a6qe2i {
                 opacity: 1.0;
             }
-
             reportview-container {
             margin-top: -2em;
             }
@@ -379,16 +376,16 @@ elif selected == "Network and Time Analysis":
     set_styling()
     st.markdown(f'<h1 style="color:#6CACE4;font-size:48px;">{"Network and Time Analysis"}</h1>', unsafe_allow_html = True)
     st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Seasonal Trends of CITI Bike Ride Counts in 2024"}</h2>', unsafe_allow_html = True)
-    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months."}</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This line plot shows the change in ride counts by month in 2024. It clearly indicates a seasonal trend, with the highest counts occurring in the summer and fall. Usage increases with warmer temperatures and drops significantly during the cold winter months. This information can be used to inform seasonal patterns of maintaining Citi bike stations."}</p>', unsafe_allow_html = True)
     st.image("./input/images/citi_seasonal_no_grid.png")
     st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Grouped Bar Plot: July CITI Bike Ride Duration Density (Normalized by User Type)"}</h2>', unsafe_allow_html = True)
-    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This grouped bar plot shows the density of specific ride durations in July, normalized by user type. It reveals a clear trend toward shorter ride durations overall. Interestingly, casual users tend to have shorter ride durations, whereas members typically have longer ones."}</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This grouped bar plot shows the density of specific ride durations in July, normalized by user type. It reveals a clear trend toward shorter ride durations overall. Interestingly, casual users tend to have shorter ride durations, whereas members typically have longer ones. This information could inform potential route suggestions for members with the Citi bike app if descriptive statistics about ride duration are known."}</p>', unsafe_allow_html = True)
     st.image("./input/images/citi_duration_dark.png")
     st.markdown(f'<h2 style = "color:#FFFFFF;font-size:36px;">{"Hexbin Plot: July CITI Bike Ride Duration vs Distance"}</h2>', unsafe_allow_html = True)
     st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This Hexbin plot shows the relationship between ride distance and duration. It was created by randomly sampling 200,000 rides from the month of July. The plot reveals a clear correlation between distance and duration, indicating that, aside from outliers, most users are using their bikes to travel from one place to another. Alternatively, the high frequency of rides with low distance and high duration suggests that some people take joy rides for extended periods without covering much ground."}</p>', unsafe_allow_html = True)
     st.image("./input/images/citi_hexbin_dark.png")
     st.markdown(f'<h2 style = "color:#FFFFFF; font-size:36px;">{"Bike Trip Network Across Manhattan Neighborhoods"}</h2>', unsafe_allow_html = True)
-    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This circular network analysis illustrates the connections and most frequently used pathways between Manhattan neighborhoods. Node colors represent degree centrality, with red indicating highly trafficked hubs and blue indicating less trafficked ones. Node size reflects the number of rides entering and exiting each hub. The graph was created by randomly sampling ~80,000 rides from the 2024 Citi Bike data. It highlights Chelsea, Midtown, and the Upper and Lower East Sides as major hubs that users frequently travel to and from."}</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style = "color:#FFFFFF;font-size:18px;">{"This circular network analysis illustrates the connections and most frequently used pathways between Manhattan neighborhoods. Node colors represent degree centrality, with red indicating highly trafficked hubs and blue indicating less trafficked ones. Node size reflects the number of rides entering and exiting each hub. The graph was created by randomly sampling ~80,000 rides from the 2024 Citi Bike data. It highlights Chelsea, Midtown, and the Upper and Lower East Sides as major hubs that users frequently travel to and from. This plot can be used to inform where future Citi bike stations can be built; for example, neighborhoods with more total rides can be prioritized for future station placement."}</p>', unsafe_allow_html = True)
     st.image("./input/images/Citi_Network_round.png")
 
 elif selected == "External Data":
